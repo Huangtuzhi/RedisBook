@@ -1,9 +1,9 @@
 #! -*- /bin/user env python
 # -*- coding: utf-8 -*-
+
+# 1.3章主要介绍了Redis的实例应用：如何实现Reddit的upvote功能。
 import redis
 import time
-
-# 1.3章主要介绍了Redis的实例应用：如何实现Reddit的upvote功能。参加blog [Reddit的Upvote功能简单实现](http://tuzhii.com/2015/04/27/upvote/)。
 
 
 ONE_WEEK_IN_SECONDS = 7 * 86400
