@@ -5,7 +5,6 @@
 import redis
 import time
 
-
 ONE_WEEK_IN_SECONDS = 7 * 86400
 VOTE_SCORE = 432
 ARTICLES_PER_PAGE = 5
@@ -48,6 +47,15 @@ def article_vote(conn, user, article):
         conn.hincrby(article, 'votes', 1)
 
 
+def article_downvote(conn, user, article):
+    article_id = article.partition(':')[-1]
+    if conn.sadd('downvoted:'+article_id, user) and int(conn.hmget(article, 'votes')[0]) > 1:
+        print 'Here'
+        conn.zincrby('score:', article, -VOTE_SCORE)
+        conn.hincrby(article, 'votes', -1)
+
+
+
 def get_articles(conn, page, order='score:'):
     start = (page-1) * ARTICLES_PER_PAGE
     end = start + ARTICLES_PER_PAGE - 1
@@ -85,3 +93,4 @@ if __name__ == '__main__':
     add_remove_groups(conn, '20', ['programming', 'writing'])
     add_remove_groups(conn, '21', ['programming', 'writing'])
     get_group_articles(conn, 'programming', 1, 'score:')
+    article_downvote(conn, 'user:10', 'article:20') #downvote
